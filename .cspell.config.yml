@@ -6,3 +6,26 @@ cache:
 import:
   - '@kurone-kito/cspell-config'
 version: '0.2'
+words:
+  # This project
+  - spegulo
+  # Vocabulary used by the imported IDD docs and instruction bundle
+  - dedup
+  - deprioritize
+  - desync
+  - desynced
+  - Esync
+  - isort
+  - ONNX
+  - pylint
+  - pyproject
+  - pytest
+  - qwen
+  - TOCTOU
+  - undispositioned
+  - unioned
+  - unpushed
+  - unreplied
+  - unscored
+  - unwaived
+  - waivable
