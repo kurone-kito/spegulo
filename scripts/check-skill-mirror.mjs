@@ -85,8 +85,11 @@ if (!exists(CANONICAL)) {
 if (failures.length > 0) {
   console.error('issue-authoring skill mirrors are out of sync:');
   for (const failure of failures) console.error(`  - ${failure}`);
+  // Deliberately tool-agnostic: this check also runs under the CI
+  // matrix's Windows/PowerShell leg, where a `cp -R` hint would name a
+  // command that does not exist on the very platform the check failed on.
   console.error(
-    `\nRe-sync with: cp -R ${CANONICAL} <root>/issue-authoring for each root above.`,
+    `\nRe-sync by replacing each root listed above with a copy of every file under ${CANONICAL}, preserving relative paths.`,
   );
   process.exit(1);
 }
