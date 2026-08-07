@@ -348,3 +348,170 @@ in a single plan:
 Present these items as a checklist proposal (e.g., in Plan mode for
 Copilot, or as a numbered list for other agents). Let the user
 select which items to tackle and in what order.
+
+## IDD Workflow
+
+This project uses Issue-Driven Development (IDD) with parallel AI
+agents. Start with [docs/idd-workflow.md](../docs/idd-workflow.md) for
+the cross-agent entry path and phase routing.
+
+Before starting IDD work, open
+`.github/instructions/idd-overview-core.instructions.md`. Open the
+routed phase file manually when the current step changes.
+
+`.github/instructions/idd-overview-core.instructions.md` keeps
+`excludeAgent: "code-review"` in its frontmatter on purpose: it holds
+the execution protocol only an implementing agent needs. This
+repository-wide guidance still applies during review.
+
+The optional issue-authoring companion is installed at
+`.claude/skills/issue-authoring/`, mirrored to
+`.agents/skills/issue-authoring/` for Codex CLI. Both copies are
+checked against the pinned helper package by
+`pnpm run lint:check:skill-mirror`.
+
+## IDD Policy Configuration
+
+`.github/idd/config.json` is the machine-readable mirror of this
+section. Keep the two aligned in the same change.
+
+### Repository Identity and Marker Prefix
+
+- **Repository name**: `spegulo`, used in the worktree-path examples
+  (`../spegulo.issue-<n>-<slug>`).
+- **`markerPrefix`**: `spegulo`. Every hidden issue-body marker uses it:
+  `spegulo-roadmap-id`, `spegulo-blocked-by`,
+  `spegulo-autopilot-suitability`, and `spegulo-effort`.
+- **`trustedMarkerActors`**: `kurone-kito`. An operational marker posted
+  by any other actor is ignored for state transitions, whatever its body
+  says.
+
+### Project Commands
+
+The values behind the Project commands table in
+`.github/instructions/idd-overview-core.instructions.md`, mirrored in
+`.github/idd/config.json`:
+
+| Name | Value |
+| --- | --- |
+| `install-deps` | `pnpm install --frozen-lockfile` |
+| `fix-validate` | `pnpm run lint:fix && pnpm run lint` |
+| `pre-push-validate` | `pnpm run lint` |
+| `post-fix-validate` | `pnpm run lint:fix && pnpm run lint` |
+| `issue-scope` | `roadmap-first` |
+| `orphan-first-policy` | `none` |
+
+`pnpm run test` is an alias of `pnpm run lint` today, which is why the
+verify rows do not list it separately. Revisit them when this project
+gains a real test runner.
+
+### IDD Label Names
+
+Distributed defaults, unchanged: `roadmap` for roadmap nodes,
+`status:blocked-by-human`, and `status:needs-decision`, plus the
+authoring hold label `status:authoring`. All four exist in this
+repository and all four are covered by the reserved-label guard below.
+
+### Merge Policy
+
+**Policy**: `fully_autonomous_merge`
+
+Upstream recommends that public repositories opt out to `human_merge`.
+That recommendation was surfaced to the maintainer during onboarding
+and consciously overridden: unattended throughput is the reason this
+repository adopted IDD, and the repository has a single owner. Read
+this value as a deliberate choice, not an oversight.
+
+### PR Review Policy
+
+**Profile**: `copilot-advisory` (the distributed default)
+
+`coderabbitai[bot]` is recorded in `advisoryBotLogins` as an advisory
+reviewer alongside Copilot. No `profiles/` artifact was applied,
+because the default profile needs none.
+
+### Review-Thread Resolution Policy
+
+**Policy**: `fast-agent-resolve` (the distributed default)
+
+### Critique-Loop Profile
+
+**Profile**: distributed defaults
+
+### Claim Timing
+
+- **claim-stale-age**: `PT24H`
+- **claim-heartbeat-interval**: `PT12H`
+
+### CI Wait Policy
+
+Distributed defaults; see [docs/policy-constants.md](../docs/policy-constants.md)
+for `ciWait.runningTimeout`, `ciWait.generationTimeout`, and
+`ciWait.rerunPolicy`.
+
+### Up-to-Date-Head Ruleset
+
+**Policy**: disabled (the upstream recommendation). This repository has
+no branch protection ruleset configured at all today, so nothing
+enables it.
+
+### Credential Scope
+
+Single owner account (`kurone-kito`); worker and merge authority are
+combined, which is what `fully_autonomous_merge` requires.
+
+### Helper Runtime Profile
+
+**Profile**: `package-manager` (pnpm)
+
+The helper bundle is a devDependency pinned to the reviewed `v0.6.0`
+tag archive rather than the mutable `main` archive. Helper bins are
+invoked through the `idd:*` `package.json` scripts, which are the
+authoritative invocation surface for this profile.
+
+### Issue-Author Approval Gate
+
+- **Gate posture**: `enabled-by-default`
+- **`maintainerApprovalActorPolicy`**: `owners-and-maintainers-only`
+- **Approval signals**: the issue author is self-authorizing as the
+  repository owner
+
+### Issue-Authoring Companion
+
+**Status**: installed
+
+**Native destination**: `.claude/skills/issue-authoring/`, read
+natively by Claude Code and auto-read by Grok Build, mirrored
+byte-identically to `.agents/skills/issue-authoring/` for Codex CLI.
+
+A symlink would have avoided the second copy, but a committed symlink
+does not survive a Windows checkout without `core.symlinks`, and this
+repository's CI matrix includes `windows-latest`.
+`scripts/check-skill-mirror.mjs` guards both copies against the pinned
+package instead, in pure Node so it also runs under the matrix's
+PowerShell leg.
+
+### Reserved-Label Guard
+
+`.github/workflows/strip-untrusted-labels.yml` removes `roadmap`,
+`status:blocked-by-human`, `status:needs-decision`, and
+`status:authoring` when `coderabbitai[bot]` applies one. That labeler
+was observed applying `roadmap` to four ordinary child issues on
+2026-08-07, which drops them from IDD discovery silently.
+
+### Worktree Guard
+
+**Status**: `worktreeGuard.enabled: false` (the distributed default).
+
+The `.githooks/` scripts are imported but inert. Activating them means
+setting `worktreeGuard.enabled` to `true`, chaining the existing Husky
+hooks into them, and pointing git at the shipped hooks in each clone:
+
+```sh
+git config core.hooksPath .githooks
+chmod +x .githooks/pre-commit .githooks/pre-push
+```
+
+`core.hooksPath` is local and uncommitted, and Husky's `prepare` script
+repoints it on every install, so the chaining recipe in
+[docs/customization.md](../docs/customization.md) is the durable form.
