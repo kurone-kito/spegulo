@@ -43,11 +43,19 @@ project-specific command values, and updates agent entry files such as
 ### Validate the import with IDD doctor (optional)
 
 After importing IDD, run the doctor script once in a repository that
-has the helper installed to catch common setup drift:
+has the helper installed to catch common setup drift. This repository
+uses the `package-manager` helper profile, so the runnable entrypoint is
+the `idd:*` script wrapper rather than a vendored `scripts/` file:
 
 ```sh
-node scripts/idd-doctor.mjs
+pnpm run idd:doctor
 ```
+
+Every other `node scripts/<name>.mjs` command in this docs bundle reads
+the same way — resolve it to this profile's authoritative surface, as
+[IDD helper script evaluation](idd-helper-scripts.md) instructs, rather
+than expecting a vendored `scripts/` copy that this profile does not
+install.
 
 The report checks core IDD file presence, unresolved placeholders,
 marker-prefix consistency, command-table sanity, and (when `gh` access
