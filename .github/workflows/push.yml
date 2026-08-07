@@ -1,0 +1,58 @@
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ startsWith(github.ref, 'refs/pull/') }}
+name: The CI workflow on push
+on:
+  push:
+permissions:
+  contents: read
+run-name: Pushed by @${{ github.actor }}
+jobs:
+  build:
+    defaults:
+      run:
+        shell: ${{ matrix.platform.shell }}
+    env:
+      PNPM_CONFIG_ENABLE_GLOBAL_VIRTUAL_STORE: 'false'
+    name: The build process
+    runs-on: ${{ matrix.platform.os }}
+    steps:
+      - name: Set git to use LF
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
+      - name: Stages the pushed branch
+        uses: actions/checkout@v7
+      - name: Setup the pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          run_install: false
+      - name: Prepare the Node.js version ${{ matrix.node-version }} environment
+        uses: actions/setup-node@v7
+        with:
+          cache: pnpm
+          check-latest: true
+          node-version: ${{ matrix.node-version }}
+      - env:
+          HUSKY: 0
+        name: Install the dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline
+      - name: Run the tests
+        run: pnpm run test
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version:
+          - 22.x
+          - 24.x
+          - 26.x
+        platform:
+          - os: ubuntu-24.04-arm
+            shell: bash
+          - os: ubuntu-slim
+            shell: bash
+          - os: windows-latest
+            shell: bash
+          - os: windows-latest
+            shell: powershell
+    timeout-minutes: 5
