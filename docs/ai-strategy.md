@@ -1,8 +1,8 @@
 # AI tooling strategy
 
-This repository currently prioritizes GitHub Copilot because it
-provides the best latency and workflow fit for day-to-day vibe coding
-in this template.
+`spegulo` currently prioritizes GitHub Copilot because it provides the
+best latency and workflow fit for day-to-day vibe coding in this
+repository.
 
 ## Canonical guidance
 
@@ -28,17 +28,6 @@ in this template.
 - When a rule uses a Copilot-specific feature name, document the
   underlying intent so other agents can map it to their own interaction
   model.
-
-## Onboarding detection
-
-When the repository name is not `pnpm-project-template` and the AI
-instruction files still contain the generic sentinel phrase, AI agents
-should proactively propose a customization workflow. This keeps the
-template's "vibe-coding ready" promise alive in derived projects by
-guiding users through documentation, tooling, and guideline
-specialization immediately after they create a new repository from
-the template. The full onboarding checklist is maintained in
-`.github/copilot-instructions.md` § Onboarding.
 
 ## Maintenance notes
 
