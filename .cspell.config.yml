@@ -9,6 +9,11 @@ version: '0.2'
 words:
   # This project
   - spegulo
+  # Vocabulary used by docs/deployment-options.md (GPU passthrough
+  # terminology)
+  - CUDA
+  - IOMMU
+  - VFIO
   # Vocabulary used by the imported IDD docs and instruction bundle
   - dedup
   - deprioritize
