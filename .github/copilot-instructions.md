@@ -1,8 +1,8 @@
 # Guidelines for AI Agents
 
 `spegulo` provisions [OpenClaw](https://github.com/openclaw/openclaw) as
-a personal knowledge AI via Infrastructure as Code, built on a pnpm/
-Node.js foundation.
+a personal knowledge AI via Infrastructure as Code, built on a
+pnpm/Node.js foundation.
 
 When contributing to this repository using AI agents, adhere to the
 following guidelines to ensure high-quality contributions that align
