@@ -13,18 +13,23 @@
 ## Scope
 
 This comparison covers the host operating systems and GPU vendor the
-maintainer's own environment and OpenClaw's own documented model
-support actually involve:
+maintainer's own environment actually involves, rather than surveying
+every possible combination:
 
 - **Host OS**: Windows with WSL2, and Linux. The maintainer's
-  environment is WSL2, and WSL2 GPU compute is effectively an NVIDIA
-  CUDA-only path today -- see [GPU access](#gpu-access) below. macOS
-  and non-WSL2 Windows GPU compute are out of scope.
-- **GPU vendor**: NVIDIA. OpenClaw's own
-  [README](https://github.com/openclaw/openclaw) documents hosted and
-  local model providers but no AMD ROCm path, so AMD/Intel GPU
-  passthrough is out of scope here rather than silently assumed
-  equivalent.
+  environment is WSL2. macOS and non-WSL2 Windows GPU compute are out
+  of scope.
+- **GPU vendor**: NVIDIA. WSL2 GPU compute is not itself
+  vendor-locked -- Microsoft documents both an NVIDIA CUDA path and a
+  cross-vendor DirectML path (AMD, Intel, or NVIDIA) for native
+  ML-framework workloads in WSL2 [^wsl-gpu-compute]. The container
+  GPU-passthrough mechanism this document actually compares (the
+  NVIDIA Container Toolkit and `--gpus`/CDI device selection; see
+  [GPU access](#gpu-access) below) is an NVIDIA-specific path today,
+  and NVIDIA is also the maintainer's actual hardware, so this
+  document narrows to NVIDIA as a deliberate scope choice -- not a
+  claim that AMD or Intel container GPU passthrough is unavailable
+  everywhere.
 
 Every factual claim about GPU passthrough support below cites a
 primary source (vendor or project documentation) with the date it was
@@ -73,11 +78,14 @@ are judged against.
 ### Whether a GPU is needed at all
 
 OpenClaw's own README states: "OpenClaw works with hosted and local
-model providers" [^openclaw-readme]. When a deployment uses a hosted
-model API instead of local inference, none of the GPU-access mechanisms
-above are load-bearing:
+model providers" [^openclaw-readme]. Local inference itself can run on
+CPU alone, but this comparison assumes GPU-accelerated local
+inference -- the mode a personal-knowledge-AI workload realistically
+needs for usable performance, and the only mode any GPU-access
+mechanism above exists to support. When a deployment uses a hosted
+model API instead, none of those mechanisms are load-bearing:
 
-| Candidate | GPU-constrained under local inference | GPU-constrained under hosted-API mode |
+| Candidate | GPU-constrained under GPU-accelerated local inference | GPU-constrained under hosted-API mode |
 | --- | --- | --- |
 | Local containers | Yes -- needs the WSL2/native GPU passthrough path above | No |
 | Local VM | Yes -- needs VFIO (Linux) or DDA/GPU-P (Windows) | No |
@@ -90,9 +98,14 @@ criteria below.
 
 ### Reproducibility
 
-- **Local containers** -- high. A Dockerfile or Compose file is
-  checked-in code; rebuilding from the repository alone reproduces an
-  equivalent environment, modulo base-image drift.
+- **Local containers** -- high for the application layer. A Dockerfile
+  or Compose file is checked-in code; rebuilding from the repository
+  alone reproduces an equivalent container environment, modulo
+  base-image drift. GPU-accelerated reproduction additionally depends
+  on host-side prerequisites the repository cannot capture -- WSL2 or
+  Docker Desktop, the NVIDIA driver, and the NVIDIA Container Toolkit
+  (see [GPU access](#gpu-access)) -- so "high" applies to the
+  application layer, not to GPU access itself.
 - **Local VM** -- medium. VM provisioning (a Packer template or
   cloud-init script) can be reproducible, but the host-side GPU setup
   -- BIOS IOMMU settings, driver blocklists, or the Hyper-V DDA
@@ -206,6 +219,7 @@ All sources below were consulted on 2026-08-08.
 
 [^toolkit]: NVIDIA, ["Installing the NVIDIA Container Toolkit"](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html), NVIDIA Container Toolkit documentation.
 [^wsl-cuda]: NVIDIA, ["CUDA on WSL User Guide"](https://docs.nvidia.com/cuda/wsl-user-guide/index.html), NVIDIA CUDA on WSL documentation.
+[^wsl-gpu-compute]: Microsoft, ["GPU accelerated ML training in WSL"](https://learn.microsoft.com/en-us/windows/wsl/tutorials/gpu-compute), Microsoft Learn, last updated 2026-06-02.
 [^docker-gpu]: Docker, ["GPU support"](https://docs.docker.com/desktop/features/gpu/), Docker Desktop documentation.
 [^ubuntu-kvm-gpu]: Canonical, ["GPU virtualisation with QEMU/KVM"](https://ubuntu.com/server/docs/how-to/graphics/gpu-virtualization-with-qemu-kvm/), Ubuntu Server documentation.
 [^dda-deploy]: Microsoft, ["Deploy graphics devices by using Discrete Device Assignment"](https://learn.microsoft.com/en-us/windows-server/virtualization/hyper-v/deploy/deploying-graphics-devices-using-dda), Microsoft Learn, last updated 2026-02-02.
