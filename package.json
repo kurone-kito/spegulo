@@ -1,16 +1,16 @@
 {
-  "name": "@kurone-kito/pnpm-project-template",
+  "name": "@kurone-kito/spegulo",
   "version": "0.1.0",
   "private": true,
-  "description": "The boilerplate project of the Node.js",
+  "description": "Infrastructure as Code that provisions OpenClaw as a personal knowledge AI",
   "keywords": [
-    "boilerplate",
-    "pnpm",
-    "template"
+    "iac",
+    "openclaw",
+    "personal-ai"
   ],
-  "homepage": "https://github.com/kurone-kito/pnpm-project-template#readme",
-  "bugs": "https://github.com/kurone-kito/pnpm-project-template/issues",
-  "repository": "github:kurone-kito/pnpm-project-template",
+  "homepage": "https://github.com/kurone-kito/spegulo#readme",
+  "bugs": "https://github.com/kurone-kito/spegulo/issues",
+  "repository": "github:kurone-kito/spegulo",
   "license": "MIT",
   "author": "kurone-kito <krone@kit.black> (https://kit.black/)",
   "type": "module",
