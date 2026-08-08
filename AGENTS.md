@@ -1,6 +1,7 @@
 # Guidelines for AI Agents
 
-This project is a generic Node.js project template using pnpm.
+`spegulo` provisions [OpenClaw](https://github.com/openclaw/openclaw)
+as a personal knowledge AI via Infrastructure as Code.
 It is currently optimized for GitHub Copilot tooling, but `AGENTS.md`
 exists so Codex can still receive the minimum project rules
 immediately, without depending on a redirect.
@@ -53,22 +54,6 @@ This project follows
 A `.gitmessage` template is available at the repository root.
 Write user-facing, lowercase subjects, keep them under 72 characters,
 and split unrelated changes into separate atomic commits.
-
-## Onboarding detection
-
-When starting a session, check whether this repository is the base
-template or a derived project:
-
-- If the repository name is exactly `pnpm-project-template`, it is
-  the base template — no action needed.
-- If the name differs **and** this file still contains the phrase
-  `generic Node.js project template using pnpm`, the guidelines
-  have not been customized yet.
-
-In that case, **proactively propose an onboarding workflow** to
-customize the project's documentation, tooling, and AI guidelines.
-See the full onboarding checklist in
-[.github/copilot-instructions.md](.github/copilot-instructions.md).
 
 ## IDD Workflow
 
