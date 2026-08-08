@@ -449,11 +449,38 @@ Distributed defaults; see [docs/policy-constants.md](../docs/policy-constants.md
 for `ciWait.runningTimeout`, `ciWait.generationTimeout`, and
 `ciWait.rerunPolicy`.
 
-### Up-to-Date-Head Ruleset
+### Branch Protection and the Up-to-Date-Head Requirement
 
-**Policy**: disabled (the upstream recommendation). This repository has
-no branch protection ruleset configured at all today, so nothing
-enables it.
+**Up-to-date-head policy**: disabled, the upstream recommendation —
+`strict` is `false` on `main`'s required status checks.
+
+`main` carries **classic branch protection** (not a ruleset), added
+during this repository's IDD onboarding because F2's CI gate fails
+closed when the branch-protection read is unreadable: `/rulesets`
+returned a readable empty list, but `/branches/main/protection`
+returned `404`, which IDD treats as structurally ambiguous between
+"nothing configured" and "the token cannot read this".
+
+Recorded settings:
+
+- `required_status_checks.strict`: `false`
+- `required_status_checks.checks`: the twelve
+  `The build process (<node>, <os>, <shell>)` contexts, each with
+  `app_id: -1` so no producer is pinned. Pinning them makes IDD
+  downgrade every check to unresolved unless
+  `ciGate.trustSourcePinnedRequiredChecks` is opted into, which is a
+  separate human-authorized decision this repository has not made.
+  CodeRabbit is deliberately **not** required, so a bot outage cannot
+  block merges.
+- `enforce_admins`: `false`
+- `required_pull_request_reviews`: none — a single-owner repository
+  running `fully_autonomous_merge` would otherwise deadlock on
+  self-approval.
+
+**Maintenance coupling**: the twelve context names come from the
+`push.yml` matrix. Changing the Node versions, runner images, or shells
+renames the contexts, and the required-check list must be updated in the
+same change or merges will block on checks that no longer exist.
 
 ### Credential Scope
 
