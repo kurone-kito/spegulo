@@ -1,1 +1,12 @@
 extends: '@kurone-kito/markdownlint-config'
+# Stop MD025 from treating the IDD docs bundle's OKF frontmatter `title:`
+# field as a second level-1 heading alongside each page's own `# H1`. The
+# default pattern (`^\s*title\s*[:=]`) matches both and fires on every
+# conforming page. See docs/customization.md, "Docs Bundle Frontmatter
+# Convention (OKF)".
+single-title:
+  front_matter_title: ''
+# Allow non-aligned table columns. The IDD reference tables carry long
+# cell content that cannot stay pipe-aligned without breaking
+# readability.
+table-column-style: false

@@ -70,6 +70,26 @@ customize the project's documentation, tooling, and AI guidelines.
 See the full onboarding checklist in
 [.github/copilot-instructions.md](.github/copilot-instructions.md).
 
+## IDD Workflow
+
+This project uses Issue-Driven Development (IDD) with parallel AI
+agents. Start with [docs/idd-workflow.md](docs/idd-workflow.md) for the
+cross-agent entry path and phase routing.
+
+Before starting IDD work, open
+`.github/instructions/idd-overview-core.instructions.md`. Antigravity
+CLI (formerly Gemini CLI) agents should open the routed phase file
+manually when the current step changes.
+
+The policy values this repository selected are recorded in
+[.github/copilot-instructions.md](.github/copilot-instructions.md)
+under "IDD Policy Configuration", mirrored machine-readably in
+`.github/idd/config.json`.
+
+The optional issue-authoring companion is installed at
+`.claude/skills/issue-authoring/`; use it to draft issue sets before the
+execution loop starts.
+
 ## Canonical reference
 
 The full, Copilot-first project guidance lives in
