@@ -1,67 +1,46 @@
-# 📄 PNPM project template
+# spegulo
 
-## Features
+> **Concept stage.** `spegulo` has no release, no installable artifact,
+> and no working deployment yet. Everything below describes what the
+> project aims to become, not what exists today.
 
-- AI agent guidance with a Copilot-first compatibility layout
-  ([GitHub Copilot canonical guide](.github/copilot-instructions.md),
-  [OpenAI Codex adapter](AGENTS.md),
-  [Claude Code adapter](CLAUDE.md),
-  [strategy notes](docs/ai-strategy.md))
-- PNPM
-- TypeScript
-- Biome
-- Commitlint with Husky
-- [Conventional Commits](https://www.conventionalcommits.org/)
-- Visual Studio Code / Vim ready
-- CI configurations
-  - CodeRabbit
-  - Dependabot
-  - GitHub Actions
+`spegulo` aims to be an Infrastructure-as-Code (IaC) project that
+provisions [OpenClaw](https://github.com/openclaw/openclaw) -- an
+MIT-licensed, self-hosted personal AI assistant -- as a personal
+knowledge AI onto a target environment. The knowledge volume it
+operates over is intended to be injected at deployment time, from
+outside this repository, so this repository itself can stay public.
 
-## How to use this template
+## What is undecided
 
-You can create a new project by using `degit` or the “Use this template”
-button on GitHub.
+The target deployment environment is still an open question. The
+candidates under consideration are a local machine, a virtual machine,
+and cloud IaaS, but which of these `spegulo` should support first has
+not been decided. See [docs/requirements.md](docs/requirements.md) for
+the full requirements and open questions, and
+[docs/deployment-options.md](docs/deployment-options.md) for the
+environment comparison feeding that decision.
 
-```sh
-npx degit kurone-kito/pnpm-project-template my-project
-cd my-project
-pnpm install
-```
+## Where to read more
 
-### Additional configurations
+- [docs/requirements.md](docs/requirements.md) -- product requirements
+  and open questions
+- [docs/deployment-options.md](docs/deployment-options.md) --
+  candidate deployment environment comparison
+- [CONTRIBUTING.md](.github/CONTRIBUTING.md) -- how to contribute to
+  this repository
 
-- Update `package.json` fields:
-  - `name`: The name of your project.
-  - `description`: A brief description of your project.
-  - `author`: Your name or organization.
-  - `license`: The license for your project (default is MIT).
-  - `homepage`: The homepage URL for your project.
-  - `repository`: The repository URL for your project.
-  - `bugs`: The URL for reporting issues.
-- Edit or remove `.github/CODEOWNERS` as needed.
-- Review `docs/ai-strategy.md`, then update `AGENTS.md`,
-  `CLAUDE.md`, and `.github/copilot-instructions.md` to reflect your
-  project specifics and preferred tooling order.
+## Development
 
-### Usecase
+The commands below are real today, even though the product they will
+eventually provision is not.
 
-When you want to create a monorepo project, you should use the
-[pnpm-workspace-template](https://github.com/kurone-kito/pnpm-workspace-template).
+### Requirements
 
-## System Requirements
-
-- Node.js: Any of the following versions
+- Node.js: any of the following versions
   - Jod LTS (`^22.23.2`)
   - Krypton LTS (`^24.2.0`)
   - Latest (`>=26.0.0`)
-
-Note that this template includes `.node-version`, `.nvmrc`, and
-`.tool-versions` files with specific Node.js versions. These files
-currently list `22.23.2`, so update them and this section as needed when
-you start a new project.
-
-## Development
 
 ### Install the dependencies
 
@@ -83,19 +62,14 @@ pnpm run lint:fix # Lint and auto-fix
 pnpm run test
 ```
 
-Currently, the command works as an alias for the `pnpm run lint` command.
-Set up your own testing framework and replace this script as needed.
+Currently, this command works as an alias for the `pnpm run lint`
+command.
 
 ### Cleaning
 
 ```sh
 pnpm run clean
 ```
-
-## Contributing
-
-Welcome to contribute to this repository! For more details,
-please refer to [CONTRIBUTING.md](.github/CONTRIBUTING.md).
 
 ## License
 
