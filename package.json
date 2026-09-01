@@ -76,7 +76,7 @@
     "@kurone-kito/cspell-config": "^0.23.0-alpha.1",
     "@kurone-kito/idd-skill": "https://codeload.github.com/kurone-kito/idd-skill/tar.gz/refs/tags/v0.6.0",
     "@kurone-kito/lint-staged-config": "^0.23.0-alpha.1",
-    "@kurone-kito/markdownlint-config": "^0.23.0-alpha.1",
+    "@kurone-kito/markdownlint-config": "^0.23.0",
     "@kurone-kito/typescript-config": "^0.22.0-alpha.9",
     "cspell": "^10.0.1",
     "husky": "^9.1.7",
