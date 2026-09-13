@@ -125,7 +125,7 @@ After Step 1A and Step 1C, you should have final values for these seven
 placeholders:
 
 | Placeholder                      | Meaning                                                   | Example                            |
-| --------------------------------- | ----------------------------------------------------------- | ------------------------------------ |
+| -------------------------------- | --------------------------------------------------------- | ---------------------------------- |
 | `{{REPO_NAME}}`                  | Repository short name used in worktree examples           | `my-app`                           |
 | `{{PROJECT_MARKER_PREFIX}}`      | Hidden issue-body marker prefix                           | `my-app`                           |
 | `{{TRUSTED_MARKER_ACTOR}}`       | Single JSON-escaped login allowed to post trusted markers | `trusted-user-a`                   |
