@@ -77,7 +77,7 @@
     "@kurone-kito/idd-skill": "https://codeload.github.com/kurone-kito/idd-skill/tar.gz/refs/tags/v0.6.0",
     "@kurone-kito/lint-staged-config": "^0.23.0",
     "@kurone-kito/markdownlint-config": "^0.23.0",
-    "@kurone-kito/typescript-config": "^0.22.0-alpha.9",
+    "@kurone-kito/typescript-config": "^0.22.0",
     "cspell": "^10.3.5",
     "husky": "^9.1.7",
     "lint-staged": "^17.6.0",
